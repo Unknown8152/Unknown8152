@@ -1,0 +1,68 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<string.h>
+#include<ctype.h>
+#define MAX_SIZE 20
+int top=-1;
+float stack[MAX_SIZE];
+void Push(float s)
+{
+	stack[++top]=s;
+}
+float POP()
+{
+	return stack[top--];
+}
+float Eval_postfix(char postfix[])
+{
+	float op1,op2;
+	char s;
+	for(int i=0;i<strlen(postfix);i++)
+	{
+		s=postfix[i];
+		if(isalpha(s))
+		{
+			float value;
+			printf("Enter the value of %c:",s);
+			scanf("%f",&value);
+			Push(value);
+		}
+		else
+		{
+			op2=POP();
+			op1=POP();
+			switch(s)
+			{
+				case'+':
+					Push(op1+op2);
+					break;
+				case'-':
+					Push(op1-op2);
+					break;
+				case'*':
+					Push(op1*op2);
+					break;
+				case'/':
+					Push(op1/op2);
+					break;
+				case'%':
+					Push((int)op1%(int)op2);
+					break;
+				case'^':
+					Push(pow(op1,op2));
+					break;
+				default:
+					printf("Invalid operation");
+			}
+		}
+	}
+	return POP();
+}
+int main()
+{
+	char postfix[MAX_SIZE];
+	printf("Enter the valid postfix expression:\n");
+	gets(postfix);
+	printf("Result is %.2f\n",Eval_postfix(postfix));
+}
